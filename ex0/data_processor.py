@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 class DataProcessor(ABC):
     def __init__(self) -> None:
         self._data: list[tuple[int, str]] = []
-        self._rank = 0
+        self._total_processed = 0
 
     @abstractmethod
     def validate(self, data: Any) -> bool:
@@ -16,8 +16,8 @@ class DataProcessor(ABC):
         pass
 
     def _store(self, value: str) -> None:
-        self._data.append((self._rank, str(value)))
-        self._rank += 1
+        self._data.append((self._total_processed, str(value)))
+        self._total_processed += 1
 
     def output(self) -> tuple[int, str]:
         return self._data.pop(0)
