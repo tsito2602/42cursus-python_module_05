@@ -9,11 +9,11 @@ class DataProcessor(ABC):
 
     @abstractmethod
     def validate(self, data: Any) -> bool:
-        pass
+        ...
 
     @abstractmethod
     def ingest(self, data: Any) -> None:
-        pass
+        ...
 
     def _store(self, value: str) -> None:
         self._data.append((self._total_processed, str(value)))
