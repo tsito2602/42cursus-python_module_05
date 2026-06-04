@@ -148,7 +148,7 @@ def main() -> None:
     print("\nRegistering Numeric Processor\n")
     data_stream.register_processor(NumericProcessor())
 
-    stream = [
+    data = [
         "Hello world",
         [3.14, -1, 2.71],
         [
@@ -161,15 +161,15 @@ def main() -> None:
         42,
         ["Hi", "five"],
     ]
-    print(f"Send first batch of data on stream: {stream}")
-    data_stream.process_stream(stream)
+    print(f"Send first batch of data on stream: {data}")
+    data_stream.process_stream(data)
     data_stream.print_processors_stats()
 
     print("\nRegistering other data processors")
     data_stream.register_processor(TextProcessor())
     data_stream.register_processor(LogProcessor())
     print("Send the same batch again")
-    data_stream.process_stream(stream)
+    data_stream.process_stream(data)
     data_stream.print_processors_stats()
 
     print(
