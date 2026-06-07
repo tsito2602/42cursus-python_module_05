@@ -108,7 +108,7 @@ class DataStream:
     def register_processor(self, proc: DataProcessor) -> None:
         self._procs.append(proc)
 
-    def _find_processor(self, value: list[Any]) -> DataProcessor | None:
+    def _find_processor(self, value: Any) -> DataProcessor | None:
         for proc in self._procs:
             if proc.validate(value):
                 return proc
