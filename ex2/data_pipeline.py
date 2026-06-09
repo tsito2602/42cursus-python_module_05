@@ -101,6 +101,34 @@ class LogProcessor(DataProcessor):
             self._store(self._format_log(data))
 
 
+class ExportPlugin(Protocol):
+    def process_output(self, data: list[tuple[int, str]]) -> None: ...
+
+
+class CsvExportPlugin:
+    def process_output(self, data: list[tuple[int, str]]) -> None:
+        output = ",".join(item[1] for item in data)
+        print("CSV Output:")
+        print(output)
+
+
+class JsonExportPlugin:
+    def _escape(self, value: str) -> str:
+        return value.replace("\\", "\\\\").replace('"', '\\"')
+
+    def process_output(self, data: list[tuple[int, str]]) -> None:
+        output = (
+            "{"
+            + ", ".join(
+                f'"item_{rank}": "{self._escape(value)}"'
+                for rank, value in data
+            )
+            + "}"
+        )
+        print("JSON Output:")
+        print(output)
+
+
 class DataStream:
     def __init__(self) -> None:
         self._procs: list[DataProcessor] = []
@@ -140,34 +168,6 @@ class DataStream:
             sent = nb if nb < proc.remaining() else proc.remaining()
             data = [proc.output() for _ in range(sent)]
             plugin.process_output(data)
-
-
-class ExportPlugin(Protocol):
-    def process_output(self, data: list[tuple[int, str]]) -> None: ...
-
-
-class CsvExportPlugin:
-    def process_output(self, data: list[tuple[int, str]]) -> None:
-        output = ",".join(item[1] for item in data)
-        print("CSV Output:")
-        print(output)
-
-
-class JsonExportPlugin:
-    def _escape(self, value: str) -> str:
-        return value.replace("\\", "\\\\").replace('"', '\\"')
-
-    def process_output(self, data: list[tuple[int, str]]) -> None:
-        output = (
-            "{"
-            + ", ".join(
-                f'"item_{rank}": "{self._escape(value)}"'
-                for rank, value in data
-            )
-            + "}"
-        )
-        print("JSON Output:")
-        print(output)
 
 
 def main() -> None:
